@@ -80,7 +80,7 @@ export default function CompanyProfile() {
     if (profileImage) formDataToSend.append('imagem_perfil', profileImage);
     if (backgroundImage) formDataToSend.append('imagem_fundo', backgroundImage);
 
-    const response = await clienteApi.atualizar<Empresa>('/empresas/eu', formDataToSend, true);
+    const response = await clienteApi.atualizar<Empresa>('/empresas/eu/atualizar/', formDataToSend, true);
 
     if (response.dados) {
       toast.success('Perfil atualizado com sucesso!');
@@ -113,7 +113,7 @@ export default function CompanyProfile() {
     formData.append('senha_antiga', passwordData.oldPassword);
     formData.append('senha_nova', passwordData.newPassword);
 
-    const response = await clienteApi.atualizar('/empresas/eu/senha', formData, true);
+    const response = await clienteApi.atualizar('/empresas/eu/senha/', formData, true);
 
     if (response.dados || !response.erro) {
       toast.success('Senha alterada com sucesso!');

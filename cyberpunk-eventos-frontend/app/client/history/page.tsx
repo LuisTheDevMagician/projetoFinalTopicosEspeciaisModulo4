@@ -26,7 +26,7 @@ export default function ClientHistory() {
 
     const fetchTickets = async () => {
       const response = await clienteApi.obter<IngressoDetalhes[]>(
-        '/ingressos/meus-ingressos',
+        '/ingressos/meus-ingressos/',
         true
       );
       if (response.dados) {

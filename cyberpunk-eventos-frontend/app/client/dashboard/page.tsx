@@ -29,7 +29,7 @@ export default function ClientDashboard() {
     if (tipoUsuario !== 'cliente') return;
 
     const fetchEvents = async () => {
-      const response = await clienteApi.obter<EventoDetalhes[]>('/eventos', false);
+      const response = await clienteApi.obter<EventoDetalhes[]>('/eventos/', false);
       if (response.dados) {
         setEvents(response.dados);
         // Inicializar quantidades com 1

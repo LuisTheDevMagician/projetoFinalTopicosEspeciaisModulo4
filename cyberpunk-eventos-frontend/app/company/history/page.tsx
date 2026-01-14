@@ -25,7 +25,7 @@ export default function CompanyHistory() {
     if (tipoUsuario !== 'empresa') return;
 
     const fetchHistory = async () => {
-      const response = await clienteApi.obter<Evento[]>('/eventos/meus-eventos/historico', true);
+      const response = await clienteApi.obter<Evento[]>('/eventos/meus-eventos/historico/', true);
       if (response.dados) {
         setEvents(response.dados);
       }

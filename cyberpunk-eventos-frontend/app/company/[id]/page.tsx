@@ -23,7 +23,7 @@ export default function CompanyPublicProfile() {
       const companyId = params.id;
 
       // Buscar dados da empresa
-      const companyResponse = await clienteApi.obter<Empresa>(`/empresas/${companyId}`, false);
+      const companyResponse = await clienteApi.obter<Empresa>(`/empresas/${companyId}/`, false);
 
       if (companyResponse.dados) {
         setCompany(companyResponse.dados);
@@ -35,7 +35,7 @@ export default function CompanyPublicProfile() {
 
       // Buscar eventos ativos da empresa
       const eventsResponse = await clienteApi.obter<Evento[]>(
-        `/empresas/${companyId}/eventos`,
+        `/empresas/${companyId}/eventos/`,
         false
       );
 

@@ -72,7 +72,7 @@ export default function CreateEventPage() {
       total_ingressos: totalTickets,
     };
 
-    const response = await clienteApi.postar('/eventos', eventData, true);
+    const response = await clienteApi.postar('/eventos/criar/', eventData, true);
 
     if (response.dados) {
       toast.success('Evento criado com sucesso!');

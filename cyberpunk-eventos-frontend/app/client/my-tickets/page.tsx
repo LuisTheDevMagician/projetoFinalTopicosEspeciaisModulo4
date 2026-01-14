@@ -55,7 +55,7 @@ export default function MyTicketsPage() {
 
     const fetchPagamentos = async () => {
       const response = await clienteApi.obter<PagamentoComIngressos[]>(
-        '/ingressos/meus-pagamentos',
+        '/ingressos/meus-pagamentos/',
         true
       );
       if (response.dados) {

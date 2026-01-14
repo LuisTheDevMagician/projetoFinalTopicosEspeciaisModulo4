@@ -56,7 +56,7 @@ export default function CompanyDashboard() {
 
       // Fetch stats
       const statsResponse = await clienteApi.obter<EstatisticasDashboard>(
-        '/eventos/dashboard/estatisticas',
+        '/eventos/dashboard/estatisticas/',
         true
       );
       if (statsResponse.dados) {
@@ -82,7 +82,7 @@ export default function CompanyDashboard() {
 
     setFinalizingEvent(eventId);
 
-    const response = await clienteApi.atualizar(`/eventos/${eventId}`, { ativo: false }, true);
+    const response = await clienteApi.atualizar(`/eventos/${eventId}/atualizar/`, { ativo: false }, true);
 
     if (response.dados) {
       toast.success('Evento finalizado com sucesso!');

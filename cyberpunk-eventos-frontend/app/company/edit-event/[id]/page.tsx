@@ -30,7 +30,7 @@ export default function EditEventPage() {
 
   useEffect(() => {
     const fetchEvent = async () => {
-      const response = await clienteApi.obter<Evento>(`/eventos/${params.id}`, true);
+      const response = await clienteApi.obter<Evento>(`/eventos/${params.id}/`, true);
 
       if (response.dados) {
         const event = response.dados;
@@ -97,7 +97,7 @@ export default function EditEventPage() {
       total_ingressos: totalTickets,
     };
 
-    const response = await clienteApi.atualizar(`/eventos/${params.id}`, eventData, true);
+    const response = await clienteApi.atualizar(`/eventos/${params.id}/atualizar/`, eventData, true);
 
     if (response.dados) {
       toast.success('Evento atualizado com sucesso!');

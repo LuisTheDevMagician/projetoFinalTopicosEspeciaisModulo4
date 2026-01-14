@@ -70,7 +70,7 @@ export default function ClientProfile() {
       email: formData.email,
     };
 
-    const response = await clienteApi.atualizar<Cliente>('/clientes/eu', dadosAtualizacao, true);
+    const response = await clienteApi.atualizar<Cliente>('/clientes/eu/atualizar/', dadosAtualizacao, true);
 
     if (response.dados) {
       toast.success('Perfil atualizado com sucesso!');
@@ -101,7 +101,7 @@ export default function ClientProfile() {
     formData.append('senha_antiga', passwordData.oldPassword);
     formData.append('senha_nova', passwordData.newPassword);
 
-    const response = await clienteApi.atualizar('/clientes/eu/senha', formData, true);
+    const response = await clienteApi.atualizar('/clientes/eu/senha/', formData, true);
 
     if (response.dados || !response.erro) {
       toast.success('Senha alterada com sucesso!');

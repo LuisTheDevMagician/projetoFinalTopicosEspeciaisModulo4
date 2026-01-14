@@ -67,7 +67,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     const fetchEvent = async () => {
       // Buscar evento através do endpoint público que não requer autenticação
-      const response = await clienteApi.obter<EventoDetalhes[]>('/eventos', false);
+      const response = await clienteApi.obter<EventoDetalhes[]>('/eventos/', false);
       if (response.dados) {
         const foundEvent = response.dados.find((e) => e.id === eventId);
         if (foundEvent) {
@@ -95,7 +95,7 @@ export default function CheckoutPage() {
     setProcessing(true);
 
     const response = await clienteApi.postar<PagamentoResponse>(
-      '/ingressos',
+      '/ingressos/comprar/',
       {
         evento_id: eventId,
         quantidade,
@@ -127,7 +127,7 @@ export default function CheckoutPage() {
     setProcessing(true);
 
     const response = await clienteApi.postar<PagamentoResponse>(
-      '/ingressos',
+      '/ingressos/comprar/',
       {
         evento_id: eventId,
         quantidade,

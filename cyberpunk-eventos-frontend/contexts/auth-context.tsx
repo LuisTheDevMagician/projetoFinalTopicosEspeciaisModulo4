@@ -40,7 +40,7 @@ export function ProvedorAuth({ children }: { children: ReactNode }) {
   };
 
   const buscarPerfilUsuario = async (tipo: 'empresa' | 'cliente') => {
-    const endpoint = tipo === 'empresa' ? '/empresas/eu' : '/clientes/eu';
+    const endpoint = tipo === 'empresa' ? '/empresas/eu/' : '/clientes/eu/';
     const resposta = await clienteApi.obter<Empresa | Cliente>(endpoint, true);
 
     if (resposta.dados) {
@@ -66,7 +66,7 @@ export function ProvedorAuth({ children }: { children: ReactNode }) {
   }, []);
 
   const entrar = async (email: string, senha: string, tipo: 'empresa' | 'cliente') => {
-    const resposta = await clienteApi.postar<RespostaAuth>('/auth/login', {
+    const resposta = await clienteApi.postar<RespostaAuth>('/auth/login/', {
       email,
       senha,
       tipo_usuario: tipo,
@@ -93,7 +93,7 @@ export function ProvedorAuth({ children }: { children: ReactNode }) {
   };
 
   const registrar = async (dados: unknown, tipo: 'empresa' | 'cliente') => {
-    const endpoint = tipo === 'empresa' ? '/auth/registrar/empresa' : '/auth/registrar/cliente';
+    const endpoint = tipo === 'empresa' ? '/auth/registrar/empresa/' : '/auth/registrar/cliente/';
     const resposta = await clienteApi.postar<Empresa | Cliente>(endpoint, dados);
 
     if (resposta.dados) {
