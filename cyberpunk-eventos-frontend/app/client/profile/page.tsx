@@ -70,7 +70,11 @@ export default function ClientProfile() {
       email: formData.email,
     };
 
-    const response = await clienteApi.atualizar<Cliente>('/clientes/eu/atualizar/', dadosAtualizacao, true);
+    const response = await clienteApi.atualizar<Cliente>(
+      '/clientes/eu/atualizar/',
+      dadosAtualizacao,
+      true
+    );
 
     if (response.dados) {
       toast.success('Perfil atualizado com sucesso!');

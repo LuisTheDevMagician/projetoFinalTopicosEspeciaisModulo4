@@ -21,6 +21,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // Company only fields
+  const [cnpj, setCnpj] = useState('');
   const [address, setAddress] = useState('');
   const [bio, setBio] = useState('');
 
@@ -37,12 +38,17 @@ export default function RegisterPage() {
       return;
     }
 
+    if (userType === 'company' && cnpj.length !== 14) {
+      toast.error('CNPJ deve conter exatamente 14 dígitos');
+      return;
+    }
+
     setIsLoading(true);
 
     // Converter os nomes dos campos para português antes de enviar
     const data =
       userType === 'company'
-        ? { nome: name, email, senha: password, endereco: address, biografia: bio }
+        ? { nome: name, email, senha: password, cnpj, endereco: address, biografia: bio }
         : { nome: name, email, senha: password };
 
     // Converter tipo de usuário para português
@@ -140,6 +146,32 @@ export default function RegisterPage() {
 
           {userType === 'company' && (
             <>
+              <div>
+                <label htmlFor="cnpj" className="block text-sm font-medium text-gray-300 mb-2">
+                  CNPJ * (14 dígitos)
+                </label>
+                <Input
+                  id="cnpj"
+                  type="text"
+                  value={cnpj}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '').slice(0, 14);
+                    setCnpj(value);
+                  }}
+                  placeholder="00000000000000"
+                  maxLength={14}
+                  required
+                  className="bg-black/30 border-gray-600 text-white"
+                />
+                {cnpj.length > 0 && (
+                  <p
+                    className={`text-xs mt-1 ${cnpj.length === 14 ? 'text-cyan-400' : 'text-yellow-400'}`}
+                  >
+                    {cnpj.length}/14 dígitos
+                  </p>
+                )}
+              </div>
+
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-300 mb-2">
                   Endereço (Opcional)

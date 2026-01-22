@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,11 +11,12 @@ import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { clienteApi } from '@/lib/api-client';
 import { toast } from 'sonner';
+import { DateRange } from 'react-day-picker';
 
 export default function CreateEventPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [endDate, setEndDate] = useState<Date>();
+  const [dateRange, setDateRange] = useState<DateRange>();
   const [formData, setFormData] = useState({
     name: '',
     location: '',
@@ -36,8 +36,8 @@ export default function CreateEventPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!endDate) {
-      toast.error('Selecione uma data para o evento');
+    if (!dateRange || !dateRange.from || !dateRange.to) {
+      toast.error('Selecione data de início e término do evento');
       setIsLoading(false);
       return;
     }
@@ -58,8 +58,11 @@ export default function CreateEventPage() {
       return;
     }
 
-    // Set end date to end of day (23:59:59)
-    const endOfDay = new Date(endDate);
+    // Set start to beginning of day and end to end of day
+    const startOfDay = new Date(dateRange.from);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(dateRange.to);
     endOfDay.setHours(23, 59, 59, 999);
 
     // Converter campos para português antes de enviar ao backend
@@ -67,6 +70,7 @@ export default function CreateEventPage() {
       nome: formData.name,
       localizacao: formData.location,
       descricao: formData.description,
+      data_inicio: startOfDay.toISOString(),
       data_fim: endOfDay.toISOString(),
       preco_ingresso: priceInCents,
       total_ingressos: totalTickets,
@@ -139,21 +143,22 @@ export default function CreateEventPage() {
             </div>
 
             <div>
-              <label htmlFor="end_date" className="block text-sm font-medium text-gray-300 mb-2">
-                Data de Término *
+              <label htmlFor="date_range" className="block text-sm font-medium text-gray-300 mb-2">
+                Período do Evento (Início até Término) *
               </label>
               <div className="bg-black/30 border border-gray-600 rounded-md p-3 flex flex-col items-center">
                 <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={setDateRange}
                   disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                   locale={ptBR}
                   className="rounded-md"
                 />
-                {endDate && (
+                {dateRange?.from && dateRange?.to && (
                   <div className="mt-2 text-center text-sm text-cyan-400">
-                    Data selecionada: {format(endDate, 'dd/MM/yyyy', { locale: ptBR })}
+                    De {format(dateRange.from, 'dd/MM/yyyy', { locale: ptBR })} até{' '}
+                    {format(dateRange.to, 'dd/MM/yyyy', { locale: ptBR })}
                   </div>
                 )}
               </div>

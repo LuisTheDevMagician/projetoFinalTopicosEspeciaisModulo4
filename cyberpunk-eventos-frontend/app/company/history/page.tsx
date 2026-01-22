@@ -72,7 +72,8 @@ export default function CompanyHistory() {
                   </div>
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-2" />
-                    Finalizado em: {new Date(event.data_fim).toLocaleDateString('pt-BR')}
+                    De {new Date(event.data_inicio).toLocaleDateString('pt-BR')} até{' '}
+                    {new Date(event.data_fim).toLocaleDateString('pt-BR')}
                   </div>
                   <div className="flex items-center">
                     <Ticket className="w-4 h-4 mr-2" />

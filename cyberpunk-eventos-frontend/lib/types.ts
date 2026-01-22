@@ -6,6 +6,7 @@ export interface Usuario {
 }
 
 export interface Empresa extends Usuario {
+  cnpj?: string;
   endereco?: string;
   biografia?: string;
   imagem_perfil?: string;
@@ -21,6 +22,7 @@ export interface Evento {
   localizacao: string;
   descricao?: string;
   criado_em: string;
+  data_inicio: string;
   data_fim: string;
   preco_ingresso: number;
   total_ingressos: number;

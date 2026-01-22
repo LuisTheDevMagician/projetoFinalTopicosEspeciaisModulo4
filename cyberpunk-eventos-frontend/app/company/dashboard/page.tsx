@@ -82,7 +82,11 @@ export default function CompanyDashboard() {
 
     setFinalizingEvent(eventId);
 
-    const response = await clienteApi.atualizar(`/eventos/${eventId}/atualizar/`, { ativo: false }, true);
+    const response = await clienteApi.atualizar(
+      `/eventos/${eventId}/atualizar/`,
+      { ativo: false },
+      true
+    );
 
     if (response.dados) {
       toast.success('Evento finalizado com sucesso!');
@@ -233,7 +237,10 @@ export default function CompanyDashboard() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(event.data_fim).toLocaleDateString('pt-BR')}</span>
+                        <span>
+                          {new Date(event.data_inicio).toLocaleDateString('pt-BR')} até{' '}
+                          {new Date(event.data_fim).toLocaleDateString('pt-BR')}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Ticket className="w-4 h-4" />

@@ -119,7 +119,14 @@ export default function CheckoutPage() {
   };
 
   const handleCardPayment = async () => {
-    if (!cardData.numeroCartao || !cardData.nomeCartao || !cardData.validade || !cardData.cvv || !cardData.email || !cardData.cpf) {
+    if (
+      !cardData.numeroCartao ||
+      !cardData.nomeCartao ||
+      !cardData.validade ||
+      !cardData.cvv ||
+      !cardData.email ||
+      !cardData.cpf
+    ) {
       toast.error('Preencha todos os campos');
       return;
     }
@@ -140,7 +147,9 @@ export default function CheckoutPage() {
     );
 
     if (response.dados) {
-      toast.success(`Pagamento realizado com sucesso! ${response.dados.quantidade} ingressos adquiridos.`);
+      toast.success(
+        `Pagamento realizado com sucesso! ${response.dados.quantidade} ingressos adquiridos.`
+      );
       setTimeout(() => {
         router.push('/client/my-tickets');
       }, 2000);

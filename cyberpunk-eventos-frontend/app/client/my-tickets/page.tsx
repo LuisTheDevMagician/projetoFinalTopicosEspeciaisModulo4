@@ -110,7 +110,9 @@ export default function MyTicketsPage() {
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
                       <CardTitle className="text-white text-xl">{pagamento.evento.nome}</CardTitle>
-                      <p className="text-cyan-400 font-mono text-sm">Pagamento: {pagamento.codigo_pagamento}</p>
+                      <p className="text-cyan-400 font-mono text-sm">
+                        Pagamento: {pagamento.codigo_pagamento}
+                      </p>
                     </div>
                     <CheckCircle className="w-6 h-6 text-green-400" />
                   </div>
@@ -124,7 +126,9 @@ export default function MyTicketsPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        <span>{new Date(pagamento.evento.data_fim).toLocaleDateString('pt-BR')}</span>
+                        <span>
+                          {new Date(pagamento.evento.data_fim).toLocaleDateString('pt-BR')}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Ticket className="w-4 h-4" />
@@ -175,7 +179,9 @@ export default function MyTicketsPage() {
                             className="bg-black/30 p-3 rounded-lg border border-cyan-400/20 flex justify-between items-center"
                           >
                             <span className="text-gray-400 text-sm">Ingresso {index + 1}</span>
-                            <span className="text-cyan-400 font-mono text-sm">{ingresso.codigo_hash}</span>
+                            <span className="text-cyan-400 font-mono text-sm">
+                              {ingresso.codigo_hash}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -190,4 +196,3 @@ export default function MyTicketsPage() {
     </DashboardLayout>
   );
 }
-

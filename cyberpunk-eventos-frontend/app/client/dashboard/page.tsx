@@ -117,6 +117,7 @@ export default function ClientDashboard() {
                     </div>
                     <div className="flex items-center">
                       <Calendar className="w-4 h-4 mr-2" />
+                      {new Date(event.data_inicio).toLocaleDateString('pt-BR')} até{' '}
                       {new Date(event.data_fim).toLocaleDateString('pt-BR')}
                     </div>
                     <div className="flex items-center">

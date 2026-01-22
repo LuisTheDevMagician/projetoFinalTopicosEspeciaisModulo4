@@ -29,7 +29,17 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ProvedorAuth>
           {children}
-          <Toaster position="bottom-right" />
+          <Toaster
+            position="bottom-right"
+            theme="dark"
+            style={
+              {
+                '--toast-background': 'rgba(0, 0, 0, 0.9)',
+                '--toast-border': '1px solid rgba(34, 211, 238, 0.5)',
+                '--toast-text': 'rgba(34, 211, 238, 1)',
+              } as React.CSSProperties
+            }
+          />
         </ProvedorAuth>
       </body>
     </html>

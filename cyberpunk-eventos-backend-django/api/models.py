@@ -29,6 +29,7 @@ class Empresa(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=255)
     email = models.EmailField(unique=True, db_index=True)
+    cnpj = models.CharField(max_length=18, unique=True, null=True, blank=True, db_index=True)
     endereco = models.CharField(max_length=500, null=True, blank=True)
     biografia = models.TextField(null=True, blank=True)
     imagem_perfil = models.CharField(max_length=500, null=True, blank=True)
@@ -121,6 +122,7 @@ class Evento(models.Model):
     localizacao = models.CharField(max_length=500)
     descricao = models.TextField(null=True, blank=True)
     criado_em = models.DateTimeField(default=timezone.now)
+    data_inicio = models.DateTimeField()
     data_fim = models.DateTimeField()
     preco_ingresso = models.IntegerField()  # Preço em centavos
     total_ingressos = models.IntegerField()

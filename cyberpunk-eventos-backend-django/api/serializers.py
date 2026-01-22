@@ -10,7 +10,7 @@ class EmpresaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Empresa
         fields = [
-            'id', 'nome', 'email', 'endereco', 'biografia',
+            'id', 'nome', 'email', 'cnpj', 'endereco', 'biografia',
             'imagem_perfil', 'imagem_fundo', 'criado_em'
         ]
         read_only_fields = ['id', 'criado_em']
@@ -26,7 +26,7 @@ class EmpresaCriarSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Empresa
-        fields = ['nome', 'email', 'senha', 'endereco', 'biografia']
+        fields = ['nome', 'email', 'senha', 'cnpj', 'endereco', 'biografia']
     
     def create(self, validated_data):
         senha = validated_data.pop('senha')
@@ -39,9 +39,10 @@ class EmpresaAtualizarSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Empresa
-        fields = ['nome', 'endereco', 'biografia', 'imagem_perfil', 'imagem_fundo']
+        fields = ['nome', 'cnpj', 'endereco', 'biografia', 'imagem_perfil', 'imagem_fundo']
         extra_kwargs = {
             'nome': {'required': False},
+            'cnpj': {'required': False},
             'endereco': {'required': False},
             'biografia': {'required': False},
             'imagem_perfil': {'required': False},
@@ -98,7 +99,7 @@ class EventoSerializer(serializers.ModelSerializer):
         model = Evento
         fields = [
             'id', 'nome', 'localizacao', 'descricao', 'criado_em',
-            'data_fim', 'preco_ingresso', 'total_ingressos', 'ativo',
+            'data_inicio', 'data_fim', 'preco_ingresso', 'total_ingressos', 'ativo',
             'organizador_id', 'ingressos_vendidos'
         ]
         read_only_fields = ['id', 'criado_em', 'organizador_id']
@@ -113,7 +114,7 @@ class EventoCriarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evento
         fields = [
-            'nome', 'localizacao', 'descricao', 'data_fim',
+            'nome', 'localizacao', 'descricao', 'data_inicio', 'data_fim',
             'preco_ingresso', 'total_ingressos'
         ]
     
@@ -134,7 +135,7 @@ class EventoAtualizarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evento
         fields = [
-            'nome', 'localizacao', 'descricao', 'data_fim',
+            'nome', 'localizacao', 'descricao', 'data_inicio', 'data_fim',
             'preco_ingresso', 'total_ingressos', 'ativo'
         ]
         extra_kwargs = {field: {'required': False} for field in fields}

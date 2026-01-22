@@ -19,6 +19,7 @@ export default function CompanyProfile() {
   const empresa = usuario as Empresa;
   const [formData, setFormData] = useState({
     name: empresa?.nome || '',
+    cnpj: empresa?.cnpj || '',
     address: empresa?.endereco || '',
     bio: empresa?.biografia || '',
   });
@@ -53,6 +54,7 @@ export default function CompanyProfile() {
         previousUsuarioRef.current = usuarioString;
         const newData = {
           name: empresaData.nome || '',
+          cnpj: empresaData.cnpj || '',
           address: empresaData.endereco || '',
           bio: empresaData.biografia || '',
         };
@@ -63,24 +65,43 @@ export default function CompanyProfile() {
   }, [usuario]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let value = e.target.value;
+
+    // Se for o campo CNPJ, filtrar apenas números
+    if (e.target.name === 'cnpj') {
+      value = value.replace(/\D/g, '').slice(0, 14);
+    }
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validar CNPJ se foi preenchido
+    if (formData.cnpj && formData.cnpj.length !== 14) {
+      toast.error('CNPJ deve ter exatamente 14 dígitos');
+      return;
+    }
+
     setIsSaving(true);
 
     const formDataToSend = new FormData();
     formDataToSend.append('nome', formData.name);
+    if (formData.cnpj) formDataToSend.append('cnpj', formData.cnpj);
     if (formData.address) formDataToSend.append('endereco', formData.address);
     if (formData.bio) formDataToSend.append('biografia', formData.bio);
     if (profileImage) formDataToSend.append('imagem_perfil', profileImage);
     if (backgroundImage) formDataToSend.append('imagem_fundo', backgroundImage);
 
-    const response = await clienteApi.atualizar<Empresa>('/empresas/eu/atualizar/', formDataToSend, true);
+    const response = await clienteApi.atualizar<Empresa>(
+      '/empresas/eu/atualizar/',
+      formDataToSend,
+      true
+    );
 
     if (response.dados) {
       toast.success('Perfil atualizado com sucesso!');
@@ -155,6 +176,31 @@ export default function CompanyProfile() {
                 required
                 className="bg-black/30 border-gray-600 text-white"
               />
+            </div>
+
+            <div>
+              <label htmlFor="cnpj" className="block text-sm font-medium text-gray-300 mb-2">
+                CNPJ
+              </label>
+              <div className="relative">
+                <Input
+                  id="cnpj"
+                  name="cnpj"
+                  type="text"
+                  value={formData.cnpj}
+                  onChange={handleChange}
+                  maxLength={14}
+                  placeholder="00000000000000"
+                  className="bg-black/30 border-gray-600 text-white"
+                />
+                <span
+                  className={`absolute right-3 top-3 text-sm ${
+                    formData.cnpj.length === 14 ? 'text-cyan-400' : 'text-gray-500'
+                  }`}
+                >
+                  {formData.cnpj.length}/14
+                </span>
+              </div>
             </div>
 
             <div>

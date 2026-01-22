@@ -51,6 +51,8 @@ def atualizar_perfil_empresa(request):
     dados = {}
     if 'nome' in request.data:
         dados['nome'] = request.data['nome']
+    if 'cnpj' in request.data:
+        dados['cnpj'] = request.data['cnpj']
     if 'endereco' in request.data:
         dados['endereco'] = request.data['endereco']
     if 'biografia' in request.data:
@@ -128,6 +130,7 @@ def obter_eventos_ativos_empresa(request, empresa_id):
             "localizacao": evento.localizacao,
             "descricao": evento.descricao,
             "criado_em": evento.criado_em,
+            "data_inicio": evento.data_inicio,
             "data_fim": evento.data_fim,
             "preco_ingresso": evento.preco_ingresso,
             "total_ingressos": evento.total_ingressos,

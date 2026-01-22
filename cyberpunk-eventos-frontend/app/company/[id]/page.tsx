@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { clienteApi } from '@/lib/api-client';
@@ -129,6 +128,13 @@ export default function CompanyPublicProfile() {
           </Card>
         )}
 
+        {/* CNPJ */}
+        {company.cnpj && (
+          <Card className="bg-black/50 border-purple-400/30 p-6 backdrop-blur-sm">
+            <p className="text-cyan-400 font-semibold text-lg">CNPJ: {company.cnpj}</p>
+          </Card>
+        )}
+
         {/* Eventos Ativos */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-6">Eventos Ativos</h2>
@@ -169,6 +175,7 @@ export default function CompanyPublicProfile() {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-2" />
+                        {new Date(event.data_inicio).toLocaleDateString('pt-BR')} até{' '}
                         {new Date(event.data_fim).toLocaleDateString('pt-BR')}
                       </div>
                       <div className="flex items-center">

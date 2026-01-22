@@ -17,6 +17,7 @@ class EmpresaBase(BaseModel):
 
 class EmpresaCriar(EmpresaBase):
     senha: str
+    cnpj: Optional[str] = None
     endereco: Optional[str] = None
     biografia: Optional[str] = None
 
@@ -30,6 +31,7 @@ class EmpresaAtualizar(BaseModel):
 
 class EmpresaResposta(EmpresaBase):
     id: int
+    cnpj: Optional[str]
     endereco: Optional[str]
     biografia: Optional[str]
     imagem_perfil: Optional[str]
@@ -68,6 +70,7 @@ class EventoBase(BaseModel):
     nome: str
     localizacao: str
     descricao: Optional[str] = None
+    data_inicio: datetime
     data_fim: datetime
     preco_ingresso: int = Field(gt=0, description="Preço em centavos")
     total_ingressos: int = Field(gt=0, description="Número total de ingressos disponíveis")
@@ -81,6 +84,7 @@ class EventoAtualizar(BaseModel):
     nome: Optional[str] = None
     localizacao: Optional[str] = None
     descricao: Optional[str] = None
+    data_inicio: Optional[datetime] = None
     data_fim: Optional[datetime] = None
     preco_ingresso: Optional[int] = None
     total_ingressos: Optional[int] = None

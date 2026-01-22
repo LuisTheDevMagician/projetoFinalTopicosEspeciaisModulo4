@@ -18,6 +18,7 @@ class Empresa(Base):
     nome = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     senha = Column(String, nullable=False)
+    cnpj = Column(String, nullable=True, unique=True, index=True)
     endereco = Column(String, nullable=True)
     biografia = Column(Text, nullable=True)
     imagem_perfil = Column(String, nullable=True)
@@ -50,6 +51,7 @@ class Evento(Base):
     localizacao = Column(String, nullable=False)
     descricao = Column(Text, nullable=True)
     criado_em = Column(DateTime, default=datetime.utcnow)
+    data_inicio = Column(DateTime, nullable=False)
     data_fim = Column(DateTime, nullable=False)
     preco_ingresso = Column(Integer, nullable=False)  # Preço em centavos
     total_ingressos = Column(Integer, nullable=False)

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,13 +12,14 @@ import { Calendar } from '@/components/ui/calendar';
 import { clienteApi } from '@/lib/api-client';
 import { Evento } from '@/lib/types';
 import { toast } from 'sonner';
+import { DateRange } from 'react-day-picker';
 
 export default function EditEventPage() {
   const router = useRouter();
   const params = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
-  const [endDate, setEndDate] = useState<Date>();
+  const [dateRange, setDateRange] = useState<DateRange>();
   const [formData, setFormData] = useState({
     name: '',
     location: '',
@@ -41,7 +41,17 @@ export default function EditEventPage() {
           ticket_price: (event.preco_ingresso / 100).toString(),
           total_tickets: event.total_ingressos.toString(),
         });
-        setEndDate(new Date(event.data_fim));
+
+        try {
+          const start = new Date(event.data_inicio);
+          const end = new Date(event.data_fim);
+
+          if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+            setDateRange({ from: start, to: end });
+          }
+        } catch {
+          toast.error('Erro ao processar datas do evento');
+        }
       } else {
         toast.error('Erro ao carregar evento');
         router.push('/company/dashboard');
@@ -64,8 +74,8 @@ export default function EditEventPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!endDate) {
-      toast.error('Selecione uma data para o evento');
+    if (!dateRange || !dateRange.from || !dateRange.to) {
+      toast.error('Selecione data de início e término do evento');
       setIsLoading(false);
       return;
     }
@@ -85,19 +95,27 @@ export default function EditEventPage() {
       return;
     }
 
-    const endOfDay = new Date(endDate);
+    const startOfDay = new Date(dateRange.from);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(dateRange.to);
     endOfDay.setHours(23, 59, 59, 999);
 
     const eventData = {
       nome: formData.name,
       localizacao: formData.location,
       descricao: formData.description,
+      data_inicio: startOfDay.toISOString(),
       data_fim: endOfDay.toISOString(),
       preco_ingresso: priceInCents,
       total_ingressos: totalTickets,
     };
 
-    const response = await clienteApi.atualizar(`/eventos/${params.id}/atualizar/`, eventData, true);
+    const response = await clienteApi.atualizar(
+      `/eventos/${params.id}/atualizar/`,
+      eventData,
+      true
+    );
 
     if (response.dados) {
       toast.success('Evento atualizado com sucesso!');
@@ -173,28 +191,29 @@ export default function EditEventPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="end_date" className="block text-sm font-medium text-gray-300 mb-2">
-                  Data de Término *
-                </label>
-                <div className="bg-black/30 border border-gray-600 rounded-md p-3">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                    locale={ptBR}
-                    className="rounded-md"
-                  />
-                  {endDate && (
-                    <div className="mt-2 text-center text-sm text-cyan-400">
-                      Data selecionada: {format(endDate, 'dd/MM/yyyy', { locale: ptBR })}
-                    </div>
-                  )}
-                </div>
+            <div>
+              <label htmlFor="date_range" className="block text-sm font-medium text-gray-300 mb-2">
+                Período do Evento (Início até Término) *
+              </label>
+              <div className="bg-black/30 border border-gray-600 rounded-md p-3 flex flex-col items-center">
+                <Calendar
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={setDateRange}
+                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                  locale={ptBR}
+                  className="rounded-md"
+                />
+                {dateRange?.from && dateRange?.to && (
+                  <div className="mt-2 text-center text-sm text-cyan-400">
+                    De {format(dateRange.from, 'dd/MM/yyyy', { locale: ptBR })} até{' '}
+                    {format(dateRange.to, 'dd/MM/yyyy', { locale: ptBR })}
+                  </div>
+                )}
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label
                   htmlFor="ticket_price"
@@ -214,10 +233,12 @@ export default function EditEventPage() {
                   required
                   className="bg-black/30 border-gray-600 text-white"
                 />
+              </div>
 
+              <div>
                 <label
                   htmlFor="total_tickets"
-                  className="block text-sm font-medium text-gray-300 mb-2 mt-4"
+                  className="block text-sm font-medium text-gray-300 mb-2"
                 >
                   Quantidade Total de Ingressos *
                 </label>
